@@ -3,12 +3,20 @@ Our solution to the I/O Model Mismatch problem.
 
 Authors: tkhadse2@illinois.edu, uuchei2@illinois.edu, kmaka5@illinois.edu, svbagga2@illinois.edu
 
-## Motivation
-Large Language Models (LLMs) such as ChatGPT, Claude, Gemini have revolutionised the way we tackle work; but one long standing problem with them is the accuracy of the information output. Retrieval-Augmented Generation (RAG) is an artificial intelligence technique that combines the text generation of large language models (LLMs) with text retrieval mechanisms. Instead of solely relying on the information that the LLM was trained under when generating text, RAG first retrieves relevant information from external sources (such as documents, APIs, or databases) and then feeds this retrieved content into the language model to generate more accurate and up-to-date responses. 
 
-The disadvantage of the RAG approach is that most databases like S3 are optimised for accessing the entirety of a file, whereas RAG prefers to process files in chunks. Vector databases are ill equipped to handle the random data accesses that a RAG will perform when looking for supplemental data for a query, as a result the queries to a database that RAG makes have significant latency. Our group proposes a Durable Layer Index, which will serve as a layer of abstraction between an LLM and vector database that will reduce the latency the LLM will have with the vector database.
+## Background & Motivation
+Vector Databases used in systems today generally do not utilize cloud-native support. They are implemented to prioritize write throughput and millisecond-level performance by tightly coupling compute with low-latency storage. For most systems, this approach works, however these systems are less scalable and are not optimized for cost, making it more difficult for a general user to adopt. We explore the efficiency of Cloud-Native Vector Databases, which prioritize cost, durability, and elasticity by decoupling compute from storage while relying on high-latency object storage (like S3). RAG workflows contain stateful, multi-step executions, which involve complex indexing; this impacts the retrieval latency and opens up performance bottlenecks. We aim to address I/O Model Mismatch, which refers to the fundamental conflict between modern indexing structures built on cloud-object storage systems. Our group proposes a Durable Layer Index (DLI), which will serve as an efficient layer of abstraction between an LLM and Vector Database to improve the latency of Cloud-Native Vector Databases.
+
+## Related Works
+BinDex: A Two-Layered Index for Fast and Robust Scans
+This paper presents a two-layered indexing approach designed for efficient database scan operations, which is closely related to the concept of layered indices optimizing retrieval by structuring access in multiple layers for speed and durability.
+RAPTOR RAG: A Hierarchical Indexing for Enhanced Retrieval
+Implements recursive summarization and clustering to create a tree-structured multi-layer index for retrieval. Each layer abstracts data. The top layers cover broad topics, while lower layers hold detailed text chunks.
+NirDiamant/RAG_Techniques (Miscellaneous Retrieval Techniques GitHub Repo)
+An Educational project demonstrating various RAG retrieval strategies including, hierarchical and layered indexing approaches.
 
 ## Implementation
-We will create a simple RAG LLM using the Langchain Python Library and Ollama and set up a simple Vector Database using ChromaDB and Boto3. We will then implement our Durable Layered Index as an interface between the RAG LLM and the Vector Database that will reduce the latency of queries the RAG LLM performs on the Vector Database.
+We will create a simple RAG LLM using the Langchain Python Library and Ollama and set up a local Vector Database using ChromaDB. We will then use Python to implement our Durable Layered Index (DLI), which will serve an interface between the RAG LLM and the Vector Database that will reduce the latency of queries the RAG LLM performs on the Vector Database. The DLI will additionally be constructed on Redis, which will serve as a semantic cache, and will utilize an LRU eviction policy paired with a TTL per entry. The Durable Layered Index will reduce the number of high-latency retrievals the RAG LLM needs to perform when collecting information for its responses.
 
-The Durable Layered Index will reduce the number of high-latency retrievals the RAG LLM needs to perform when collecting information for its responses.
+## Evaluation
+We will evaluate our Durable Layered Index using A/B testing by benchmarking the performance of our LLM with our vector database both with and without the Durable Layered Index. In addition to latency, we will measure end-to-end latency, throughput, and LLM response accuracy of our two setups.

@@ -158,14 +158,14 @@ def cleanup_local_data(local_path: str):
 if __name__ == "__main__":
     
     # 1. Download database from S3
-    sync_from_s3(S3_BUCKET_NAME, S3_KEY_PREFIX, LOCAL_PERSIST_DIR)
+    #sync_from_s3(S3_BUCKET_NAME, S3_KEY_PREFIX, LOCAL_PERSIST_DIR)
 
     # 2. Initialize Chroma Client and perform operations
     chroma_client = get_chroma_client(LOCAL_PERSIST_DIR)
     run_db_operations(chroma_client)
 
     # 3. Upload the (potentially updated) database back to S3
-    sync_to_s3(S3_BUCKET_NAME, S3_KEY_PREFIX, LOCAL_PERSIST_DIR)
+    #sync_to_s3(S3_BUCKET_NAME, S3_KEY_PREFIX, LOCAL_PERSIST_DIR)
 
     # 4. Cleanup local files (important for serverless or temporary environments)
     # cleanup_local_data(LOCAL_PERSIST_DIR)

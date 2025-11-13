@@ -20,3 +20,59 @@ We will create a simple RAG LLM using the Langchain Python Library and Ollama an
 
 ## Evaluation
 We will evaluate our Durable Layered Index using A/B testing by benchmarking the performance of our LLM with our vector database both with and without the Durable Layered Index. In addition to latency, we will measure end-to-end latency, throughput, and LLM response accuracy of our two setups.
+
+# Project Setup: Initializing the Vector Database
+This project's database is built from the massive 22 GB MS MARCO document corpus. Because the raw data and the final database are too large to be stored in Git, each team member must run a one-time initialization script to build the database locally.
+
+This script will parse the raw data, generate vector embeddings for all 3.2 million documents, and store them in a persistent ChromaDB instance located outside of this project repository.
+
+## Step 0: Create parent directory
+Create a random "598RAP" folder (could be any name) and within that folder, clone our [repo](https://github.com/tkhdse/Durable-Layer-Index.git)
+
+This is what your setup will look like as you follow the steps:
+
+![Parent Folder Setup](images/image.png)
+
+## Step 1: Download the MS MARCO Dataset
+Go to the official MS MARCO Datasets website: (https://microsoft.github.io/msmarco/Datasets.html)
+
+On that page, find the "Document Ranking" section.
+
+Download the msmarco-docs.tsv file (22 GB). This is the file shown in the image below, containing 3.2 million documents.
+
+Place the downloaded msmarco-docs.tsv file inside the root of this "598RAP" (or whatever name you pick) folder. The init_db.py script is configured to look for it there.
+
+## Step 2: Install Python Dependencies
+This script requires libraries for database management, data parsing, and embedding generation. Install them using pip:
+
+```Bash
+
+pip install chromadb pandas sentence-transformers torch
+```
+
+- chromadb: The vector database client.   
+
+- pandas: Used to efficiently read the 22 GB TSV file in chunks.
+
+- sentence-transformers: The library used to generate the document embeddings.   
+
+- torch: Required by sentence-transformers and enables GPU acceleration.
+
+## Step 3: Run the Initialization Script
+With the msmarco-docs.tsv file in your project folder and the libraries installed, run the initialization script from your terminal:
+
+```Bash
+
+python init_db.py
+```
+
+IMPORTANT: READ THIS
+This is a one-time, very long process. The script will parse all 3.2 million documents from the TSV file and generate a vector embedding for each one.
+
+- ON A CPU: This process can take 40+ hours.
+
+- OUTPUT: The script will create a new folder named chroma_persistent_db outside of your Durable-Layered-Index repo folder. This is intentional to keep the large database files (100GB+) out of the Git repository.
+
+- IDEMPOTENT: The script is idempotent. After it finishes successfully, you can run init_db.py again. It will detect the database already exists, skip the 40-hour process, and start instantly.
+
+### Note from Khush: idk what the successful output from the end of the script is supposed to look like so... reach out if you run into any issues. Goal is to have a persistent folder that we can use to create a client when we need to query the VectorDB.

@@ -8,7 +8,7 @@ import requests
 
 
 
-COLLECTION_NAME = "ms_marco_v2_docs"
+COLLECTION_NAME = "ms_marco_docs"
 
 
 

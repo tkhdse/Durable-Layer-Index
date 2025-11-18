@@ -11,7 +11,7 @@ from pathlib import Path
 TSV_FILE_PATH = "../msmarco-docs.tsv" 
 
 DB_PATH = "../chroma_persistent_db"
-COLLECTION_NAME = "ms_marco_v2_docs"
+COLLECTION_NAME = "ms_marco_docs"
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2" # A reliable, local model
 BATCH_SIZE = 1000  # Number of documents to process and ingest at a time
 
@@ -84,7 +84,7 @@ def _ingest_data(collection: chromadb.Collection, tsv_file_path: str):
         print(f"Final collection count: {collection.count()}")
 
 
-def get_or_initialize_db_client(db_path: str = "./chroma_persistent_db"):
+def get_or_initialize_db_client(db_path: str = "../chroma_persistent_db"):
     """
     Initializes and returns a persistent ChromaDB client.
     

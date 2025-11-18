@@ -2,36 +2,36 @@ import os
 import time
 import chromadb
 from chromadb.utils import embedding_functions
-import openai
 from init_db import get_or_initialize_db_client
 from dotenv import load_dotenv
+import requests
 
 
 
 COLLECTION_NAME = "ms_marco_v2_docs"
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-OPENAI_MODEL_NAME = "gpt-4o-mini"
-openai.api_key = OPENAI_API_KEY
 
 
 
-def generate_answer_with_openai(query: str, docs: list[str]) -> str:
-    context = "\n\n".join(f"Document {i+1}:\n{doc}" for i, doc in enumerate(docs))
-    prompt  = (
-        f"Use the following context to answer the question.\n\n"
+def generate_answer(query: str, docs: list[str]) -> str:
+    context = "\n\n".join(f"Doc {i+1}:\n{docs[i][:500]}…" for i in range(len(docs)))
+    prompt = (
+        f"You are a helpful assistant. Use the context to answer the question.\n\n"
         f"Question: {query}\n\n"
         f"Context:\n{context}\n\n"
         f"Answer:"
     )
-    response = openai.ChatCompletion.create(
-        model = OPENAI_MODEL_NAME,
-        messages = [
-            {"role" : "system", "content" : "You are a helpful assistant."},
-            {"role" : "user", "content" : prompt}
-        ],
-        temperature = 0.2
+    response = requests.post(
+        "http://localhost:11434/api/generate",
+        json={
+            "model": "llama3",
+            "prompt": prompt,
+            "temperature": 0.2,
+        },
+        timeout=300,
     )
-    return response.choices[0].message.content.strip()
+
+    data = response.json()
+    return data.get("response", "").strip()
 
 
 def query_and_answer(collection: chromadb.Collection, file_path: str, top_k: int = 5):
@@ -50,7 +50,7 @@ def query_and_answer(collection: chromadb.Collection, file_path: str, top_k: int
             include = ["documents"]
         )
         docs = results["documents"][0]
-        res = generate_answer_with_openai(query, docs)
+        res = generate_answer(query, docs)
         print(f"Answer: {res}\n")
     end_time = time.time()
     print(f"Normal RAG Time: {end_time - start_time}\n")

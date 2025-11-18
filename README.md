@@ -29,7 +29,7 @@ Your local dev setup should look like this (ignore the ms-marco.tsv file and the
 
 ![Local Dev Setup](images/image.png)
 
-Following this, download Ollama from the following link [link] (https://ollama.com/download). After downloading, run the following commands to get the llama3 model running locally:
+Following this, download Ollama from the following link [link](https://ollama.com/download). After downloading, run the following commands to get the llama3 model running locally:
 
 ```
 ollama pull llama3

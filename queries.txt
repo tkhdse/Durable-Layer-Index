@@ -1,10 +1,50 @@
-What religious affiliation is the University of Notre Dame known for?
-When was the University of Notre Dame founded?
-Why was President Johnson impeached?
-What dialects exist in Iran and how did they form?
-How does the Pope dress?
-Give me a 2-3 sentence summary of the financial crisis?
-Tell me about the 2008 Olympic torch relay
-Why was Kanye West sued?
-How has the unemployment rate in Portugal changed?
-How is the biotech sector in New York?
+What factors determine whether hydrogen behaves as a gas or a plasma?
+How does the process of nuclear fusion occur inside stars?
+What conditions are required for hydrogen to become metallic?
+Why is hydrogen considered the most abundant element in the universe?
+How does the Bohr model describe electron energy levels?
+What is the difference between covalent and ionic bonding?
+How do superconductors maintain zero electrical resistance?
+What causes the emission spectrum of hydrogen to produce discrete lines?
+What role do isotopes play in determining atomic mass?
+Why does water exhibit unique properties such as high surface tension?
+What differentiates dominant traits from recessive traits in Mendelian inheritance?
+How do Punnett squares help predict genetic outcomes?
+What is the role of DNA in protein synthesis?
+How do mutations contribute to genetic diversity?
+What is the difference between genotype and phenotype?
+Why are mitochondria known as the “powerhouses of the cell”?
+What biological processes are involved in natural selection?
+How does meiosis contribute to genetic variation?
+What factors influence evolutionary fitness in a population?
+How do enzymes accelerate biochemical reactions?
+What factors contributed to the collapse of the Western Roman Empire?
+How did the Silk Road facilitate cultural exchange between regions?
+What innovations were associated with the Industrial Revolution?
+Why is the Magna Carta considered a foundational political document?
+What caused the division between the Eastern and Western Christian Churches?
+How did ancient Mesopotamia develop early writing systems?
+What role did trade play in the growth of the Mali Empire?
+Which events led to the outbreak of World War I?
+How did the printing press influence the spread of knowledge?
+What were the major causes of the French Revolution?
+What themes are most prominent in Beyoncé’s album Lemonade?
+How did the Beatles influence popular music in the 1960s?
+What artistic techniques defined the Renaissance period?
+What makes Shakespeare’s tragedies culturally significant?
+How did hip hop evolve into a global cultural movement?
+What stylistic elements distinguish Impressionist paintings?
+How does film noir create a mood of moral ambiguity?
+Why is jazz considered a uniquely American art form?
+How did Broadway musicals change during the 20th century?
+What cultural impact did the Harry Potter franchise have worldwide?
+What does the law of supply and demand explain about market behavior?
+How do inflation and interest rates influence consumer purchasing power?
+What are the advantages of a mixed-market economy?
+Why do monopolies reduce economic competition?
+How does globalization shape modern labor markets?
+What factors contribute to income inequality across countries?
+How does social media influence political discourse?
+What psychological effects are associated with prolonged stress?
+How do governments use fiscal policy to stimulate economic growth?
+What role does scientific literacy play in modern societies?

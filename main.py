@@ -45,7 +45,10 @@ def query_and_answer(collection: chromadb.Collection, file_path: str, top_k: int
         
     with open("output.txt", "a+") as f:
         start_time = time.time()
-        for query in queries:
+        for i in range(len(queries)):
+            if i > 0 and i % 5 == 0:
+                time.sleep(15)
+            query = queries[i]
             results = collection.query(
                 query_texts=[query],
                 n_results=top_k,

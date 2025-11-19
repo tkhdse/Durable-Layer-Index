@@ -20,3 +20,11 @@ We will create a simple RAG LLM using the Langchain Python Library and Ollama an
 
 ## Evaluation
 We will evaluate our Durable Layered Index using A/B testing by benchmarking the performance of our LLM with our vector database both with and without the Durable Layered Index. In addition to latency, we will measure end-to-end latency, throughput, and LLM response accuracy of our two setups.
+
+# Project Setup: Initializing the Vector Database
+
+Download and extract the contents of the zip file OUTSIDE of this repo folder from this google drive [link](https://drive.google.com/file/d/1Nxdkw4FWXBgtf0HpUV-w8ovjr9GVt_Sr/view?usp=drive_link).
+
+Your local dev setup should look like this (ignore the ms-marco.tsv file and the name should be something other than "chroma_persistent_db" wtv is on the google drive).
+
+![Local Dev Setup](images/image.png)

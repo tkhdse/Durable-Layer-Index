@@ -56,6 +56,7 @@ def query_and_answer(collection: chromadb.Collection, file_path: str, top_k: int
             chroma_elapsed = time.time() - start
             chroma_total += chroma_elapsed
             docs = results["documents"][0]
+            start = time.time()
             answer, context = generate_answer(query, docs)
             llm_elapsed = time.time() - start
             llm_total += llm_elapsed

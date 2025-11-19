@@ -1,10 +1,10 @@
 import os
 import time
 import chromadb
-from chromadb.utils import embedding_functions
 from init_db import get_or_initialize_db_client
+from chromadb.utils import embedding_functions
 from langchain.llms import Ollama
-from langchain.smith.evaluation import CriteriaEvalChain
+from langchain.evaluation import CriteriaEvalChain
 
 COLLECTION_NAME = "ms_marco_v2_docs"
 answer_llm = Ollama(model="llama3", temperature=0.2)

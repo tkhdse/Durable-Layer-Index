@@ -44,19 +44,26 @@ def query_and_answer(collection: chromadb.Collection, file_path: str, top_k: int
         queries = [line.strip() for line in f if line.strip()]
         
     with open("output.txt", "a+") as f:
-        start_time = time.time()
+        chroma_total = 0.0
+        llm_total = 0.0
         for i in range(len(queries)):
             query = queries[i]
+            start = time.time()
             results = collection.query(
                 query_texts=[query],
                 n_results=top_k,
             )
+            chroma_elapsed = time.time() - start
+            chroma_total += chroma_elapsed
             docs = results["documents"][0]
             answer, context = generate_answer(query, docs)
+            llm_elapsed = time.time() - start
+            llm_total += llm_elapsed
 
             f.write(f"Query: {query}\nAnswer: {answer}\n\n")
 
-    print(f"Total Time: {round(time.time() - start_time, 3)} seconds")
+        print(f"Total Chroma time: {chroma_total:.4f} seconds")
+        print(f"Total LLM time: {llm_total:.4f} seconds")
 
 
 def main():

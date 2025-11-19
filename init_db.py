@@ -8,12 +8,12 @@ from pathlib import Path
 # --- Configuration ---
 
 # **IMPORTANT**: Set this to the exact path where you downloaded 'msmarco-docs.tsv'
-TSV_FILE_PATH = "../msmarco-docs.tsv" 
+TSV_FILE_PATH = "squad_paragraphs.tsv" 
 
 DB_PATH = "../chroma_persistent_db"
-COLLECTION_NAME = "ms_marco_docs"
+COLLECTION_NAME = "squad_docs"
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2" # A reliable, local model
-BATCH_SIZE = 1000  # Number of documents to process and ingest at a time
+BATCH_SIZE = 5000  # Number of documents to process and ingest at a time
 
 def _ingest_data(collection: chromadb.Collection, tsv_file_path: str):
     """
@@ -24,7 +24,7 @@ def _ingest_data(collection: chromadb.Collection, tsv_file_path: str):
     
     if not os.path.exists(tsv_file_path):
         print(f"Error: TSV file not found at '{tsv_file_path}'.")
-        print("Please download 'msmarco-docs.tsv' and place it in the correct directory.")
+        print("Please download 'squad_paragraphs.tsv' and place it in the correct directory.")
         return
 
     # We read the 22GB file in chunks using pandas to keep memory usage low.

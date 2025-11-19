@@ -2,73 +2,73 @@ import os
 import time
 import chromadb
 from chromadb.utils import embedding_functions
-from init_db import get_or_initialize_db_client
-from langchain.llms import Ollama
-from langchain.smith.evaluation import CriteriaEvalChain
+from langchain_google_genai import ChatGoogleGenerativeAI
+from dotenv import load_dotenv
+from pathlib import Path
 
-COLLECTION_NAME = "ms_marco_v2_docs"
-answer_llm = Ollama(model="llama3", temperature=0.2)
+
+load_dotenv()
+COLLECTION_NAME = "squad_docs"
+llm = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash",
+    temperature=0.2,
+)
 
 
 def generate_answer(query: str, docs: list[str]):
-    context = "\n\n".join(f"Doc {i+1}:\n{docs[i][:500]}…" for i in range(len(docs)))
-    prompt = (
-        f" Use the context to answer the question.\n\n"
-        f"Question: {query}\n\n"
-        f"Context:\n{context}\n\n"
-        f"Answer:"
+    context = "\n\n".join(
+        f"Doc {i+1}:\n{docs[i]}" for i in range(len(docs))
     )
-    answer = answer_llm(prompt)
-    return answer.strip(), context
+    prompt = f"""
+        Use the provided context documents ONLY to answer the following question. 
+        If the answer is not contained in the context, state that you cannot find the answer.
 
+        Question: {query}
 
-def build_evaluator():
-    evaluator_llm = Ollama(model="llama3")
-    criteria = {
-        "factual_accuracy": "Is the answer factually correct based on the provided context?",
-        "conciseness": "Is the answer concise and to the point?"
-    }
-    return CriteriaEvalChain.from_llm(
-        llm=evaluator_llm,
-        criteria=criteria
-    )
+        Context:
+        {context}
+
+        Answer:
+    """.strip()
+
+    response = llm.invoke(prompt)
+    return response.content, context
 
 
 def query_and_answer(collection: chromadb.Collection, file_path: str, top_k: int = 5):
     if not os.path.exists(file_path):
+        print(f"File does not exist: {file_path}")
         return
 
     with open(file_path, "r") as f:
         queries = [line.strip() for line in f if line.strip()]
-
-    embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction()
-    eval_chain = build_evaluator()
-    start_time = time.time()
-    for query in queries:
-        print(f"Query: {query}")
-        embedding = embedding_func(query).tolist()
-        results = collection.query(
-            query_embeddings=[embedding],
-            n_results=top_k,
-            include=["documents"]
-        )
-        docs = results["documents"][0]
-        answer, context = generate_answer(query, docs)
-        print(f"Answer: {answer}")
-        eval_result = eval_chain.evaluate(
-            input=query,
-            prediction=answer,
-            reference=context
-        )
-        print(f"Evaluation: {eval_result}")
         
-    print(f"\nTotal Time: {time.time() - start_time}")
+    with open("output.txt", "a+") as f:
+        start_time = time.time()
+        for query in queries:
+            results = collection.query(
+                query_texts=[query],
+                n_results=top_k,
+            )
+            docs = results["documents"][0]
+            answer, context = generate_answer(query, docs)
+
+            f.write(f"Query: {query}\nAnswer: {answer}\n\n")
+
+    print(f"Total Time: {round(time.time() - start_time, 3)} seconds")
 
 
 def main():
-    client = get_or_initialize_db_client()
-    collection = client.get_collection(COLLECTION_NAME)
-    query_and_answer(collection, "queries.txt", top_k=5)
+    db_path_resolved = str(Path("../chroma_persistent_db").resolve())
+    client = chromadb.PersistentClient(path=db_path_resolved)
+    embed_func = embedding_functions.SentenceTransformerEmbeddingFunction(
+        model_name="all-MiniLM-L6-v2"
+    )
+    collection = client.get_collection(
+        name=COLLECTION_NAME,
+        embedding_function=embed_func
+    )
+    query_and_answer(collection, "queries.txt", 5)
 
 
 if __name__ == "__main__":
